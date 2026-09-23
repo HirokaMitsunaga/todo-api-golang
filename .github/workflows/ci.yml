@@ -1,0 +1,68 @@
+name: CI
+
+on:
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main, develop]
+
+jobs:
+    backend:
+        name: Go Backend - Test & Build
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:18-alpine
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: test_password
+                    POSTGRES_DB: test_db
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
+        defaults:
+            run:
+                working-directory: ./backend
+
+        env:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: test_password
+            POSTGRES_DB: test_db
+            DATABASE_URL: postgres://postgres:test_password@localhost:5432/test_db?sslmode=disable
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Setup Go
+              uses: actions/setup-go@v7
+              with:
+                  go-version-file: ./backend/go.mod
+                  cache-dependency-path: ./backend/go.sum
+
+            - name: Download dependencies
+              run: go mod download
+
+            - name: Check formatting
+              run: |
+                  files=$(gofmt -l .)
+                  if [ -n "$files" ]; then
+                    echo "These files need gofmt:"
+                    echo "$files"
+                    exit 1
+                  fi
+
+            - name: Run static analysis
+              run: go vet ./...
+
+            - name: Run tests
+              run: go test ./...
+
+            - name: Build
+              run: go build ./...
