@@ -13,9 +13,9 @@ type Title struct {
 	title string
 }
 
-func NewTitle(name string) (*Title, error) {
-	if len(name) < min || len(name) > max {
+func NewTitle(value string) (*Title, error) {
+	if len(value) < min || len(value) > max {
 		return &Title{}, fmt.Errorf("３文字以内、１００文字以下で入力してください")
 	}
-	return &Title{title: name}, nil
+	return &Title{title: value}, nil
 }
