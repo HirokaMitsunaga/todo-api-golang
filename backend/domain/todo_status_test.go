@@ -5,6 +5,55 @@ import (
 	"testing"
 )
 
+func TestNewTodoStatus(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		want  string
+	}{
+		{
+			name:  "creates PENDING",
+			input: "PENDING",
+			want:  "PENDING",
+		},
+		{
+			name:  "creates IN_PROGRESS",
+			input: "IN_PROGRESS",
+			want:  "IN_PROGRESS",
+		},
+		{
+			name:  "creates COMPLETED",
+			input: "COMPLETED",
+			want:  "COMPLETED",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewTodoStatus(tt.input)
+			if err != nil {
+				t.Fatalf("NewTodoStatus() failed: %v", err)
+			}
+			if got.Name() != tt.want {
+				t.Errorf("NewTodoStatus().Name() = %q, want %q", got.Name(), tt.want)
+			}
+		})
+	}
+}
+
+func TestNewTodoStatus_invalid(t *testing.T) {
+	got, err := NewTodoStatus("UNKNOWN")
+	if err == nil {
+		t.Fatal("NewTodoStatus() succeeded unexpectedly")
+	}
+	if !errors.Is(err, ErrInvalidTodoStatus) {
+		t.Errorf("NewTodoStatus() error = %v, want ErrInvalidTodoStatus", err)
+	}
+	if got != nil {
+		t.Errorf("NewTodoStatus() = %v, want nil", got)
+	}
+}
+
 func TestTodoStatus_transitionTo(t *testing.T) {
 	tests := []struct {
 		name        string
