@@ -3,75 +3,64 @@ package domain
 import (
 	"reflect"
 	"testing"
+
+	"github.com/oklog/ulid/v2"
 )
 
-func TestUser_chnageName(t *testing.T) {
+func TestUser_ChangeName(t *testing.T) {
 	tests := []struct {
-		name string // description of this test case
-		// Named input parameters for receiver constructor.
-		cid       string
-		cname     string
-		cemail    string
-		cpassword string
-		// Named input parameters for target function.
-		newName string
-		want    *User
-		wantErr bool
+		name     string
+		cname    string
+		cemail   string
+		password string
+		newName  string
 	}{
 		{
-			name:      "changes the user name",
-			cid:       "user-1",
-			cname:     "old name",
-			cemail:    "user@example.com",
-			cpassword: "password",
-			newName:   "new name",
-			want: &User{
-				id:       "user-1",
-				name:     "new name",
-				email:    "user@example.com",
-				password: "password",
-			},
+			name:     "changes the user name",
+			cname:    "old name",
+			cemail:   "user@example.com",
+			password: "password",
+			newName:  "new name",
 		},
 		{
-			name:      "changes the user name to an empty string",
-			cid:       "user-2",
-			cname:     "old name",
-			cemail:    "another@example.com",
-			cpassword: "another-password",
-			newName:   "",
-			want: &User{
-				id:       "user-2",
-				name:     "",
-				email:    "another@example.com",
-				password: "another-password",
-			},
+			name:     "changes the user name to an empty string",
+			cname:    "old name",
+			cemail:   "another@example.com",
+			password: "another-password",
+			newName:  "",
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u, err := NewUser(tt.cid, tt.cname, tt.cemail, tt.cpassword)
+			u, err := NewUser(tt.cname, tt.cemail, tt.password)
 			if err != nil {
 				t.Fatalf("could not construct receiver type: %v", err)
 			}
-			got, gotErr := u.ChangeName(tt.newName)
-			if gotErr != nil {
-				if !tt.wantErr {
-					t.Errorf("chnageName() failed: %v", gotErr)
-				}
-				return
+			if u.id == (ulid.ULID{}) {
+				t.Fatal("NewUser() generated a zero ULID")
 			}
-			if tt.wantErr {
-				t.Fatal("chnageName() succeeded unexpectedly")
+
+			got, err := u.ChangeName(tt.newName)
+			if err != nil {
+				t.Fatalf("ChangeName() failed: %v", err)
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("chnageName() = %v, want %v", got, tt.want)
+
+			want := &User{
+				id:       u.id,
+				name:     tt.newName,
+				email:    tt.cemail,
+				password: tt.password,
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Errorf("ChangeName() = %v, want %v", got, want)
 			}
 
 			wantOriginal := &User{
-				id:       tt.cid,
+				id:       u.id,
 				name:     tt.cname,
 				email:    tt.cemail,
-				password: tt.cpassword,
+				password: tt.password,
 			}
 			if !reflect.DeepEqual(u, wantOriginal) {
 				t.Errorf("ChangeName() mutated the receiver: got %v, want %v", u, wantOriginal)
@@ -80,7 +69,7 @@ func TestUser_chnageName(t *testing.T) {
 	}
 }
 
-func TestUser_chnageName_zeroValue(t *testing.T) {
+func TestUser_ChangeName_zeroValue(t *testing.T) {
 	var u User
 
 	got, err := u.ChangeName("new name")

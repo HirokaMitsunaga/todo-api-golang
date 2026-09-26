@@ -1,18 +1,22 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/oklog/ulid/v2"
+)
 
 // フィールドは非公開で、domainパッケージ外から直接読み書きできない(小文字はじまりのため)
 type User struct {
-	id       string
+	id       ulid.ULID
 	name     string
 	email    string
 	password string
 }
 
-func NewUser(id string, name string, email string, password string) (*User, error) {
+func NewUser(name string, email string, password string) (*User, error) {
 	return &User{
-		id:       id,
+		id:       ulid.Make(),
 		name:     name,
 		email:    email,
 		password: password,
@@ -23,7 +27,7 @@ func NewUser(id string, name string, email string, password string) (*User, erro
 func (u *User) ChangeName(name string) (*User, error) {
 	// User{} のようにゼロ値で生成された User は不変条件を満たさないため、
 	// 利用時にエラーとして扱う。
-	if u == nil || u.id == "" {
+	if u == nil || u.id == (ulid.ULID{}) {
 		return nil, errors.New("invalid user: create with NewUser")
 	}
 
