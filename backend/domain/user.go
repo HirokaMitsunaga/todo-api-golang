@@ -44,3 +44,19 @@ func (u *User) ChangeName(name string) (*User, error) {
 	updated.name = name
 	return &updated, nil
 }
+
+func (u *User) ID() ulid.ULID {
+	return u.id
+}
+
+func (u *User) Name() string {
+	return u.name
+}
+
+func (u *User) Email() string {
+	return u.email
+}
+
+func (u *User) Password() string {
+	return u.password
+}
