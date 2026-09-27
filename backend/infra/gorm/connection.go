@@ -13,7 +13,9 @@ func Open(dsn string) (*gorm.DB, error) {
 	}
 	db, err := gorm.Open(
 		postgres.Open(dsn),
-		&gorm.Config{},
+		&gorm.Config{
+			TranslateError: true, //ErrDuplicatedKeyを使うために必要　参考：https://gorm.io/docs/error_handling.html#Dialect-Translated-Errors
+		},
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect database: %w", err)
