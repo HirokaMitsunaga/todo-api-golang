@@ -31,6 +31,20 @@ func NewTodoStatus(name string) (TodoStatus, error) {
 	}
 }
 
+// TODO:defaultがnilになるためReconstructでもcase使うのか考える
+func ReconstructTodoStatus(name string) TodoStatus {
+	switch name {
+	case "PENDING":
+		return pendingStatus{}
+	case "IN_PROGRESS":
+		return inProgressStatus{}
+	case "COMPLETED":
+		return completedStatus{}
+	default:
+		return nil
+	}
+}
+
 func invalidTodoStatusTransitionError(from TodoStatus, to TodoStatus) error {
 	fromName := "<nil>"
 	if from != nil {

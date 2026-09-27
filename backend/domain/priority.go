@@ -17,3 +17,6 @@ func NewPriority(value uint16) (*Priority, error) {
 	}
 	return &Priority{priority: value}, nil
 }
+func ReconstructPriority(value uint16) *Priority {
+	return &Priority{priority: value}
+}

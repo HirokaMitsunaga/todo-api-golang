@@ -19,3 +19,7 @@ func NewTitle(value string) (*Title, error) {
 	}
 	return &Title{title: value}, nil
 }
+
+func ReconstructTitle(value string) *Title {
+	return &Title{title: value}
+}

@@ -20,6 +20,16 @@ func NewTodo(title Title, status TodoStatus, userId ulid.ULID, priority Priority
 	}, nil
 }
 
+func ReconstructTodo(id ulid.ULID, title Title, status TodoStatus, userId ulid.ULID, priority Priority) *Todo {
+	return &Todo{
+		id:       id,
+		title:    title,
+		status:   status,
+		userId:   userId,
+		priority: priority,
+	}
+}
+
 func (t *Todo) updateStatus(status TodoStatus) (*Todo, error) {
 	nextStatus, err := t.status.transitionTo(status)
 	if err != nil {
