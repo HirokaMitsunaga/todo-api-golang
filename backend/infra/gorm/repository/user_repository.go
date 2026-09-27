@@ -62,15 +62,18 @@ func (ur *userRepository) Update(user *domain.User) error {
 		Password: user.Password(),
 	}
 
-	if err := ur.db.Updates(&record).Error; err != nil {
-		if errors.Is(err, gorm.ErrDuplicatedKey) {
+	result := ur.db.Updates(&record)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
 			return ErrUserDuplicated
 		}
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return ErrUserNotFound
-		}
-		return err
+		return result.Error
 	}
+
+	if result.RowsAffected == 0 {
+		return ErrUserNotFound
+	}
+
 	return nil
 }
 
