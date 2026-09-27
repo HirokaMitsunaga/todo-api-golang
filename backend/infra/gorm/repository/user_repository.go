@@ -48,6 +48,7 @@ func (ur *userRepository) Create(user *domain.User) error {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return ErrUserDuplicated
 		}
+		return err
 	}
 	return nil
 }
@@ -68,6 +69,7 @@ func (ur *userRepository) Update(user *domain.User) error {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrUserNotFound
 		}
+		return err
 	}
 	return nil
 }
