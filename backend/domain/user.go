@@ -23,6 +23,15 @@ func NewUser(name string, email string, password string) (*User, error) {
 	}, nil
 }
 
+func Reconstructor(id ulid.ULID, name string, email string, password string) (*User, error) {
+	return &User{
+		id:       id,
+		name:     name,
+		email:    email,
+		password: password,
+	}, nil
+}
+
 // 名前を変更した新しいUserを返すようにしてイミュータブルになるようにしている
 func (u *User) ChangeName(name string) (*User, error) {
 	// User{} のようにゼロ値で生成された User は不変条件を満たさないため、
