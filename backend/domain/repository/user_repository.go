@@ -7,7 +7,7 @@ import (
 )
 
 type IUserRepository interface {
-	findById(id ulid.ULID) (*domain.User, error)
-	save(todo *domain.Todo) error
-	delete(id ulid.ULID) error
+	FindById(id ulid.ULID) (*domain.User, error)
+	Save(todo *domain.Todo) error
+	Delete(id ulid.ULID) error
 }
