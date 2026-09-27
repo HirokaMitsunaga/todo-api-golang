@@ -1,9 +1,13 @@
 package repository
 
-import "todo-api/domain"
+import (
+	"todo-api/domain"
+
+	"github.com/oklog/ulid/v2"
+)
 
 type IUserRepository interface {
-	findById(id string) (*domain.User, error)
+	findById(id ulid.ULID) (*domain.User, error)
 	save(todo *domain.Todo) error
-	delete(id string) error
+	delete(id ulid.ULID) error
 }
