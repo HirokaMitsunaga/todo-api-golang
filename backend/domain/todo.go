@@ -40,3 +40,23 @@ func (t *Todo) updateStatus(status TodoStatus) (*Todo, error) {
 	updated.status = nextStatus
 	return &updated, nil
 }
+
+func (t *Todo) ID() ulid.ULID {
+	return t.id
+}
+
+func (t *Todo) Title() Title {
+	return t.title
+}
+
+func (t *Todo) Status() TodoStatus {
+	return t.status
+}
+
+func (t *Todo) UserID() ulid.ULID {
+	return t.userId
+}
+
+func (t *Todo) Priority() Priority {
+	return t.priority
+}
