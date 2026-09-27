@@ -22,7 +22,7 @@ func (td *todoRepository) FindById(id ulid.ULID) (*domain.Todo, error) {
 	var todo model.Todo
 	if err := td.db.Where("id=?", id.String()).First(&todo).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrTodoNotFound
+			return nil, repository.ErrTodoNotFound
 		}
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (td *todoRepository) Update(todo *domain.Todo) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrTodoNotFound
+		return repository.ErrTodoNotFound
 	}
 
 	return nil
@@ -76,11 +76,7 @@ func (td *todoRepository) Delete(id ulid.ULID) error {
 	}
 
 	if result.RowsAffected == 0 {
-		return ErrTodoNotFound
+		return repository.ErrTodoNotFound
 	}
 	return nil
 }
-
-var ErrTodoNotFound = errors.New(
-	"user not Found",
-)

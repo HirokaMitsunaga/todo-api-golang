@@ -23,7 +23,7 @@ func (ur *userRepository) FindById(id ulid.ULID) (*domain.User, error) {
 
 	if err := ur.db.Where("id=?", id.String()).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, repository.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (ur *userRepository) Create(user *domain.User) error {
 	if err := ur.db.Create(&record).Error; err != nil {
 		//TODO:どのフィールドで重複しているのかわかるようにする
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
-			return ErrUserDuplicated
+			return repository.ErrUserDuplicated
 		}
 		return err
 	}
@@ -65,13 +65,13 @@ func (ur *userRepository) Update(user *domain.User) error {
 	result := ur.db.Updates(&record)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
-			return ErrUserDuplicated
+			return repository.ErrUserDuplicated
 		}
 		return result.Error
 	}
 
 	if result.RowsAffected == 0 {
-		return ErrUserNotFound
+		return repository.ErrUserNotFound
 	}
 
 	return nil
@@ -86,17 +86,9 @@ func (ur *userRepository) Delete(id ulid.ULID) error {
 	}
 
 	if result.RowsAffected == 0 {
-		return ErrUserNotFound
+		return repository.ErrUserNotFound
 	}
 
 	return nil
 
 }
-
-var ErrUserNotFound = errors.New(
-	"user not Found",
-)
-
-var ErrUserDuplicated = errors.New(
-	"user is Duplicated",
-)

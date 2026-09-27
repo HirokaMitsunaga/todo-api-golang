@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 
 	"todo-api/domain"
+	domainRepository "todo-api/domain/repository"
 )
 
 func newMockTodoRepository(t *testing.T) (*todoRepository, sqlmock.Sqlmock) {
@@ -119,7 +120,7 @@ func TestTodoRepository_FindById_NotFound(t *testing.T) {
 		}))
 
 	_, err := repo.FindById(todo.ID())
-	if !errors.Is(err, ErrTodoNotFound) {
+	if !errors.Is(err, domainRepository.ErrTodoNotFound) {
 		t.Fatalf("FindById() error = %v, want ErrTodoNotFound", err)
 	}
 
@@ -189,7 +190,7 @@ func TestTodoRepository_Update_NotFound(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 0))
 
 	err := repo.Update(todo)
-	if !errors.Is(err, ErrTodoNotFound) {
+	if !errors.Is(err, domainRepository.ErrTodoNotFound) {
 		t.Fatalf("Update() error = %v, want ErrTodoNotFound", err)
 	}
 
@@ -224,7 +225,7 @@ func TestTodoRepository_Delete_NotFound(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 0))
 
 	err := repo.Delete(todo.ID())
-	if !errors.Is(err, ErrTodoNotFound) {
+	if !errors.Is(err, domainRepository.ErrTodoNotFound) {
 		t.Fatalf("Delete() error = %v, want ErrTodoNotFound", err)
 	}
 

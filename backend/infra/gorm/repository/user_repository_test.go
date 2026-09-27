@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 
 	"todo-api/domain"
+	"todo-api/domain/repository"
 )
 
 func newMockUserRepository(t *testing.T) (*userRepository, sqlmock.Sqlmock) {
@@ -109,7 +110,7 @@ func TestUserRepository_FindById_NotFound(t *testing.T) {
 		}))
 
 	_, err := repo.FindById(user.ID())
-	if !errors.Is(err, ErrUserNotFound) {
+	if !errors.Is(err, repository.ErrUserNotFound) {
 		t.Fatalf("FindById() error = %v, want ErrUserNotFound", err)
 	}
 
@@ -154,7 +155,7 @@ func TestUserRepository_Create_Duplicated(t *testing.T) {
 		WillReturnError(gorm.ErrDuplicatedKey)
 
 	err := repo.Create(user)
-	if !errors.Is(err, ErrUserDuplicated) {
+	if !errors.Is(err, repository.ErrUserDuplicated) {
 		t.Fatalf("Create() error = %v, want ErrUserDuplicated", err)
 	}
 
@@ -199,7 +200,7 @@ func TestUserRepository_Update_Duplicated(t *testing.T) {
 		WillReturnError(gorm.ErrDuplicatedKey)
 
 	err := repo.Update(user)
-	if !errors.Is(err, ErrUserDuplicated) {
+	if !errors.Is(err, repository.ErrUserDuplicated) {
 		t.Fatalf("Update() error = %v, want ErrUserDuplicated", err)
 	}
 
@@ -222,7 +223,7 @@ func TestUserRepository_Update_NotFound(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 0))
 
 	err := repo.Update(user)
-	if !errors.Is(err, ErrUserNotFound) {
+	if !errors.Is(err, repository.ErrUserNotFound) {
 		t.Fatalf("Update() error = %v, want ErrUserNotFound", err)
 	}
 
@@ -257,7 +258,7 @@ func TestUserRepository_Delete_NotFound(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 0))
 
 	err := repo.Delete(user.ID())
-	if !errors.Is(err, ErrUserNotFound) {
+	if !errors.Is(err, repository.ErrUserNotFound) {
 		t.Fatalf("Delete() error = %v, want ErrUserNotFound", err)
 	}
 

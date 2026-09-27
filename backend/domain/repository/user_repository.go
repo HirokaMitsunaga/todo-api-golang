@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"todo-api/domain"
 
 	"github.com/oklog/ulid/v2"
@@ -12,3 +13,7 @@ type IUserRepository interface {
 	Update(user *domain.User) error
 	Delete(id ulid.ULID) error
 }
+
+var ErrUserNotFound = errors.New("user not found")
+
+var ErrUserDuplicated = errors.New("user already exists")
