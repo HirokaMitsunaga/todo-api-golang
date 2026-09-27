@@ -8,6 +8,6 @@ import (
 
 type IUserRepository interface {
 	FindById(id ulid.ULID) (*domain.User, error)
-	Save(todo *domain.User) error
+	Save(user *domain.User) error
 	Delete(id ulid.ULID) error
 }
