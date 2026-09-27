@@ -14,4 +14,4 @@ type ITodoRepository interface {
 	Delete(id ulid.ULID) error
 }
 
-var ErrTodoNotFound = errors.New("todo not found")
+var ErrTodoNotFoundRepository = errors.New("todo not found")

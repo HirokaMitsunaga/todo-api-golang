@@ -14,6 +14,6 @@ type IUserRepository interface {
 	Delete(id ulid.ULID) error
 }
 
-var ErrUserNotFound = errors.New("user not found")
+var ErrUserNotFoundRepository = errors.New("user not found")
 
-var ErrUserDuplicated = errors.New("user already exists")
+var ErrUserDuplicatedRepository = errors.New("user already exists")

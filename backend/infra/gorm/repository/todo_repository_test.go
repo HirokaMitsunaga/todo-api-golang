@@ -120,8 +120,8 @@ func TestTodoRepository_FindById_NotFound(t *testing.T) {
 		}))
 
 	_, err := repo.FindById(todo.ID())
-	if !errors.Is(err, domainRepository.ErrTodoNotFound) {
-		t.Fatalf("FindById() error = %v, want ErrTodoNotFound", err)
+	if !errors.Is(err, domainRepository.ErrTodoNotFoundRepository) {
+		t.Fatalf("FindById() error = %v, want ErrTodoNotFoundRepository", err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
@@ -190,8 +190,8 @@ func TestTodoRepository_Update_NotFound(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 0))
 
 	err := repo.Update(todo)
-	if !errors.Is(err, domainRepository.ErrTodoNotFound) {
-		t.Fatalf("Update() error = %v, want ErrTodoNotFound", err)
+	if !errors.Is(err, domainRepository.ErrTodoNotFoundRepository) {
+		t.Fatalf("Update() error = %v, want ErrTodoNotFoundRepository", err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
@@ -225,8 +225,8 @@ func TestTodoRepository_Delete_NotFound(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 0))
 
 	err := repo.Delete(todo.ID())
-	if !errors.Is(err, domainRepository.ErrTodoNotFound) {
-		t.Fatalf("Delete() error = %v, want ErrTodoNotFound", err)
+	if !errors.Is(err, domainRepository.ErrTodoNotFoundRepository) {
+		t.Fatalf("Delete() error = %v, want ErrTodoNotFoundRepository", err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
