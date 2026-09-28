@@ -28,10 +28,10 @@ func (td *todoRepository) FindById(id ulid.ULID) (*domain.Todo, error) {
 	}
 	return domain.ReconstructTodo(
 		id,
-		*domain.ReconstructTitle(todo.Title),
+		domain.ReconstructTitle(todo.Title),
 		domain.ReconstructTodoStatus(todo.Status),
 		ulid.MustParse(todo.UserID),
-		*domain.ReconstructPriority(todo.Priority),
+		domain.ReconstructPriority(todo.Priority),
 	), nil
 }
 

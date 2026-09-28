@@ -48,10 +48,10 @@ func newTestTodo(t *testing.T) *domain.Todo {
 
 	return domain.ReconstructTodo(
 		ulid.MustParse("01ARZ3NDEKTSV4RRFFQ69G5FAV"),
-		*title,
+		title,
 		domain.ReconstructTodoStatus("PENDING"),
 		ulid.MustParse("01ARZ3NDEKTSV4RRFFQ69G5FAW"),
-		*priority,
+		priority,
 	)
 }
 
