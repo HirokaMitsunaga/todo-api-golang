@@ -1,0 +1,6 @@
+- 更新系について個別にユースケースを作成するのか、それともひとつの更新のユースケースで全て実行するのか(withつけて繋げる)
+- インタフェースで定義している関数の引数はポインタ型にしない方がいい？
+- そもそもポインタ型にすべき箇所とそうでない箇所はどこ？
+- domainの配下にrepositoryを作成して、IFを定義してそれを使うようにinfra/repositoryとしたがこれでいいのか？
+- domain層のrepository配下とinfra層のrepository配下のpackageが同じだけど大丈夫なのか？
+- domain層について[DMMの記事](https://developersblog.dmm.com/entry/2025/04/09/110000#511-%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3-Domain)読んだ方がいいかも
