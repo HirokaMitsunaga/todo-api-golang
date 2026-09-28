@@ -7,7 +7,7 @@ import (
 	"github.com/oklog/ulid/v2"
 )
 
-func TestUser_ChangeName(t *testing.T) {
+func TestUser_WithName(t *testing.T) {
 	tests := []struct {
 		name     string
 		cname    string
@@ -41,9 +41,9 @@ func TestUser_ChangeName(t *testing.T) {
 				t.Fatal("NewUser() generated a zero ULID")
 			}
 
-			got, err := u.ChangeName(tt.newName)
+			got, err := u.WithName(tt.newName)
 			if err != nil {
-				t.Fatalf("ChangeName() failed: %v", err)
+				t.Fatalf("WithName() failed: %v", err)
 			}
 
 			want := &User{
@@ -53,7 +53,7 @@ func TestUser_ChangeName(t *testing.T) {
 				password: tt.password,
 			}
 			if !reflect.DeepEqual(got, want) {
-				t.Errorf("ChangeName() = %v, want %v", got, want)
+				t.Errorf("WithName() = %v, want %v", got, want)
 			}
 
 			wantOriginal := &User{
@@ -63,20 +63,20 @@ func TestUser_ChangeName(t *testing.T) {
 				password: tt.password,
 			}
 			if !reflect.DeepEqual(u, wantOriginal) {
-				t.Errorf("ChangeName() mutated the receiver: got %v, want %v", u, wantOriginal)
+				t.Errorf("WithName() mutated the receiver: got %v, want %v", u, wantOriginal)
 			}
 		})
 	}
 }
 
-func TestUser_ChangeName_zeroValue(t *testing.T) {
+func TestUser_WithName_zeroValue(t *testing.T) {
 	var u User
 
-	got, err := u.ChangeName("new name")
+	got, err := u.WithName("new name")
 	if err == nil {
-		t.Fatal("ChangeName() succeeded unexpectedly for a zero-value User")
+		t.Fatal("WithName() succeeded unexpectedly for a zero-value User")
 	}
 	if got != nil {
-		t.Errorf("ChangeName() = %v, want nil for a zero-value User", got)
+		t.Errorf("WithName() = %v, want nil for a zero-value User", got)
 	}
 }
