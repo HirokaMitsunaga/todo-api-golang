@@ -35,10 +35,29 @@ func (t *Todo) updateStatus(status TodoStatus) (*Todo, error) {
 	if err != nil {
 		return nil, err
 	}
+	return &Todo{
+		id:       t.id,
+		title:    t.title,
+		status:   nextStatus,
+		userId:   t.userId,
+		priority: t.priority,
+	}, nil
 
-	updated := *t
-	updated.status = nextStatus
-	return &updated, nil
+}
+
+func (t *Todo) Update(title Title, status TodoStatus, priority Priority) (*Todo, error) {
+	updated, err := t.updateStatus(status)
+	if err != nil {
+		return nil, err
+	}
+	return &Todo{
+		id:       t.id,
+		title:    title,
+		status:   updated.status,
+		userId:   t.userId,
+		priority: priority,
+	}, nil
+
 }
 
 func (t *Todo) ID() ulid.ULID {

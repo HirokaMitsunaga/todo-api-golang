@@ -3,6 +3,8 @@ package domain
 import (
 	"errors"
 	"testing"
+
+	"github.com/oklog/ulid/v2"
 )
 
 func TestNewTodoStatus(t *testing.T) {
@@ -131,14 +133,34 @@ func TestTodoStatus_transitionTo(t *testing.T) {
 }
 
 func TestTodo_updateStatus(t *testing.T) {
-	todo := &Todo{status: pendingStatus{}}
+	id := ulid.Make()
+	userID := ulid.Make()
+	todo := ReconstructTodo(
+		id,
+		ReconstructTitle("Buy milk"),
+		pendingStatus{},
+		userID,
+		ReconstructPriority(1),
+	)
 
 	updated, err := todo.updateStatus(inProgressStatus{})
 	if err != nil {
 		t.Fatalf("updateStatus() failed: %v", err)
 	}
+	if updated.ID() != id {
+		t.Errorf("updateStatus() ID = %v, want %v", updated.ID(), id)
+	}
+	if updated.Title().Value() != "Buy milk" {
+		t.Errorf("updateStatus() title = %q, want %q", updated.Title().Value(), "Buy milk")
+	}
 	if updated.status != (inProgressStatus{}) {
 		t.Errorf("updateStatus() status = %v, want IN_PROGRESS", updated.status.Name())
+	}
+	if updated.UserID() != userID {
+		t.Errorf("updateStatus() user ID = %v, want %v", updated.UserID(), userID)
+	}
+	if updated.Priority().Value() != 1 {
+		t.Errorf("updateStatus() priority = %d, want %d", updated.Priority().Value(), 1)
 	}
 	if todo.status != (pendingStatus{}) {
 		t.Errorf("updateStatus() mutated the receiver: got %v, want PENDING", todo.status.Name())
