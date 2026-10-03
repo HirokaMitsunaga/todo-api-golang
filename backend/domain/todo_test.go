@@ -21,6 +21,7 @@ func TestTodo_Update(t *testing.T) {
 	updated, err := todo.Update(
 		ReconstructTitle("Buy bread"),
 		inProgressStatus{},
+		userID,
 		ReconstructPriority(5),
 	)
 	if err != nil {
@@ -58,17 +59,19 @@ func TestTodo_Update(t *testing.T) {
 }
 
 func TestTodo_Update_invalidStatusTransition(t *testing.T) {
+	userId := ulid.Make()
 	todo := ReconstructTodo(
 		ulid.Make(),
 		ReconstructTitle("Buy milk"),
 		pendingStatus{},
-		ulid.Make(),
+		userId,
 		ReconstructPriority(1),
 	)
 
 	updated, err := todo.Update(
 		ReconstructTitle("Buy bread"),
 		completedStatus{},
+		userId,
 		ReconstructPriority(5),
 	)
 	if err == nil {

@@ -45,7 +45,7 @@ func (t *Todo) updateStatus(status TodoStatus) (*Todo, error) {
 
 }
 
-func (t *Todo) Update(title Title, status TodoStatus, priority Priority) (*Todo, error) {
+func (t *Todo) Update(title Title, status TodoStatus, userId ulid.ULID, priority Priority) (*Todo, error) {
 	updated, err := t.updateStatus(status)
 	if err != nil {
 		return nil, err
