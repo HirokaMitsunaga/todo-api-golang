@@ -7,12 +7,21 @@ import (
 )
 
 type fakeTodoRepository struct {
+	todo        *domain.Todo
+	findByID    ulid.ULID
 	createdTodo *domain.Todo
+	updatedTodo *domain.Todo
+	findErr     error
 	createErr   error
+	updateErr   error
 }
 
-func (f *fakeTodoRepository) FindById(ulid.ULID) (*domain.Todo, error) {
-	return nil, nil
+func (f *fakeTodoRepository) FindById(id ulid.ULID) (*domain.Todo, error) {
+	f.findByID = id
+	if f.findErr != nil {
+		return nil, f.findErr
+	}
+	return f.todo, nil
 }
 
 func (f *fakeTodoRepository) Create(todo *domain.Todo) error {
@@ -20,8 +29,9 @@ func (f *fakeTodoRepository) Create(todo *domain.Todo) error {
 	return f.createErr
 }
 
-func (f *fakeTodoRepository) Update(*domain.Todo) error {
-	return nil
+func (f *fakeTodoRepository) Update(todo *domain.Todo) error {
+	f.updatedTodo = todo
+	return f.updateErr
 }
 
 func (f *fakeTodoRepository) Delete(ulid.ULID) error {
